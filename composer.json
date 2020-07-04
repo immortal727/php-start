@@ -1,0 +1,12 @@
+{
+  "name": "dmitriy/php-start",
+  "type": "project",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Web\\": "src/"
+    }
+  }
+}
