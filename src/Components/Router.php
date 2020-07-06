@@ -29,29 +29,16 @@ class Router{
 
                 // Извлекаем первый элемент массива 
                 // и добавляем фразу Controllers
-                $controllerName=array_shift($segments)."Controller";
+                $controllerName='Web\Controllers\\'.array_shift($segments)."Controller";
                 $controllerName=ucfirst($controllerName);
                 
                 // Аналогично получаем имя метода
                 $actionName="Action".ucfirst(array_shift($segments));
-                
-                // Подключаем файл контроллера
-                //var_dump($_SERVER['REQUEST_URI']);
-                //var_dump(ROOT);
-                $controllersFile=ROOT.'/src/Controllers/'.$controllerName.'.php';
-                var_dump($controllerName);
-                var_dump($actionName);
-                /* if(file_exists($controllersFile)){
-                    echo "Файл $controllerName.php существует";
-                } */
 
                 // Создаем объект класса контроллера
                 // и вызываем его метод
                 $controllerObject = new $controllerName;
-                $rezult=$controllerObject->$actionName();
-                if($result != null){
-                    break;
-                }
+                $controllerObject->$actionName();
             }
         }
     }
