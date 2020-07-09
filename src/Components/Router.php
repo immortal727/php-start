@@ -17,28 +17,45 @@ class Router{
     public function run(){
         // Получаем строку запроса из метода GetUri()
         $uri=$this->GetUri();
-        // Проверка наличие накого запроса в роуторе
+        // Проверка наличие такого запроса в роуторе
         foreach ($this->routes as $uriPattern => $path) {
             // Сравниваем $uriPattern и $path
             // ~ - это для того, если в строке запроса будут /
             if(preg_match("~$uriPattern~",$uri))
             {
-                // Определить какой контролллер и Action 
-                // обрабатывают запрос
-                $segments=explode('/',$path);
+                // "Запрос, который набрал пользователь $uri<br>";
+                // "Что ищем (совпадение из правила) $uriPattern<br>";
+                // "Кто обрабатывает $path<br>";
 
+                // Получаем внутренний путь из внешнего согласно правилу
+                // Нужно сформировать путь
+                $internalRoute=preg_replace("~$uriPattern~",$path,$uri);
+
+                // Определяем контроллер, action, параметры
+                $segments=explode('/',$internalRoute);
+                
                 // Извлекаем первый элемент массива 
                 // и добавляем фразу Controllers
-                $controllerName='Web\Controllers\\'.array_shift($segments)."Controller";
-                $controllerName=ucfirst($controllerName);
+                $controllerName='Web\Controllers\\'.ucfirst(array_shift($segments))."Controller";
                 
                 // Аналогично получаем имя метода
                 $actionName="Action".ucfirst(array_shift($segments));
 
+               /*  echo "Контроллер $controllerName<br>";
+                echo "Событие $actionName<br>"; */
+                $parametrs=$segments;
+               /*  echo "Параметры<br>";
+                var_dump($parametrs); */
+
                 // Создаем объект класса контроллера
                 // и вызываем его метод
                 $controllerObject = new $controllerName;
-                $controllerObject->$actionName();
+                // Функция call_user_func_array передает Action 
+                // в объект с параметрами
+                $result=call_user_func_array(array($controllerObject,$actionName), $parametrs); 
+                if ($result !=null){
+                    break;
+                }  
             }
         }
     }

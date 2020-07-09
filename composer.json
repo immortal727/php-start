@@ -3,7 +3,9 @@
   "type": "project",
   "license": "MIT",
   "minimum-stability": "dev",
-  "require": {},
+  "require": {
+    "ext-pdo": "*"
+  },
   "autoload": {
     "psr-4": {
       "Web\\": "src/"
